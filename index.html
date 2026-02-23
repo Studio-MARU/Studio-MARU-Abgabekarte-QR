@@ -2,13 +2,19 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>STUDIO MARU 丸 | Kontakt</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
+        /* --- GRUNDLEGENDE REPARATUR FÜR MOBILE & BUTTON-GRÖSSEN --- */
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
         body {
             background-color: #FBFBFB;
             font-family: 'Inter', sans-serif;
@@ -24,11 +30,11 @@
         .container {
             width: 100%;
             max-width: 400px;
-            padding: 40px 20px;
+            padding: 40px 24px;
             text-align: center;
-            box-sizing: border-box;
         }
 
+        /* --- ANIMATIONEN --- */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
@@ -38,6 +44,7 @@
             font-weight: 500;
             font-size: 26px;
             letter-spacing: 1.5px;
+            margin-top: 0;
             margin-bottom: 12px;
             color: #1A1A1A;
             opacity: 0;
@@ -54,8 +61,10 @@
             animation: fadeInUp 0.8s ease forwards 0.3s;
         }
 
+        /* --- BUTTONS (JETZT ALLE EXAKT GLEICH GROSS) --- */
         .link-btn {
             display: block;
+            width: 100%;
             background-color: #766F6E;
             color: #FFFFFF;
             text-decoration: none;
@@ -64,23 +73,121 @@
             border-radius: 6px;
             font-weight: 400;
             font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            border: none;
+            cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
             opacity: 0;
             animation: fadeInUp 0.8s ease forwards;
-            cursor: pointer;
-            border: none;
-            width: 100%;
+            text-align: center;
         }
 
-        .btn-1 { animation-delay: 0.5s; }
-        .btn-2 { animation-delay: 0.6s; }
-        .btn-3 { animation-delay: 0.7s; }
-        .btn-4 { animation-delay: 0.8s; }
+        .btn-1 { animation-delay: 0.4s; }
+        .btn-2 { animation-delay: 0.5s; }
+        .btn-3 { animation-delay: 0.6s; }
+        .btn-4 { animation-delay: 0.7s; }
 
         .link-btn:hover {
             background-color: #5c5655;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+
+        /* --- NEU: ELEGANTES & MOBIL-OPTIMIERTES EINGABEFENSTER --- */
+        .modal-overlay {
+            display: none; /* Wird per JS auf 'flex' gesetzt */
+            position: fixed; 
+            z-index: 100; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0, 0, 0, 0.4); 
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-box {
+            background-color: #FFFFFF;
+            padding: 40px 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 340px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            text-align: center;
+            position: relative;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-box h2 {
+            font-weight: 500;
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #1A1A1A;
+        }
+
+        .modal-box p {
+            font-weight: 400;
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            color: #999999;
+            font-size: 28px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: #1A1A1A;
+        }
+
+        .code-input {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid #EAEAEA;
+            border-radius: 6px;
+            background-color: #FBFBFB;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .code-input:focus {
+            border-color: #766F6E;
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(118, 111, 110, 0.1);
+        }
+
+        .error-msg {
+            color: #D9534F;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .modal-submit {
+            margin-bottom: 0;
+            animation: none; /* Verhindert doppelte Animation im Modal */
+            opacity: 1;
         }
     </style>
     
@@ -99,39 +206,80 @@
     <p class="slogan">Klarheit in jedem Detail. Lass uns gemeinsam deine nächste Vision zum Leben erwecken.</p>
     
     <a href="https://calendly.com/studiomaru-info/30min" class="link-btn btn-1" target="_blank">Kostenloses Erstgespräch</a>
-    
-    <button onclick="kundenLogin()" class="link-btn btn-2">Kundenportal</button>
-    
+    <button onclick="openModal()" class="link-btn btn-2">Kundenportal</button>
     <a href="mailto:info@studiomaru.at" class="link-btn btn-3">E-Mail senden</a>
     <a href="https://wa.me/436642766355" class="link-btn btn-4">WhatsApp Anfrage</a>
 </div>
 
-<script>
-    function kundenLogin() {
-        // Fragt den Kunden nach seinem Code
-        let code = prompt("Bitte gib deinen Studio MARU Kunden-Code ein:");
+<div id="loginModal" class="modal-overlay">
+    <div class="modal-box">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2>Kunden-Login</h2>
+        <p>Bitte gib deinen persönlichen Zugangscode ein.</p>
         
-        // Wenn er auf Abbrechen klickt oder nichts eingibt, passiert nichts
-        if (!code) return;
+        <input type="text" id="kundenCodeInput" class="code-input" placeholder="Z.B. MARU-01" onkeypress="handleEnter(event)">
+        <div id="errorText" class="error-msg">Dieser Code ist leider ungültig.</div>
+        
+        <button onclick="checkCode()" class="link-btn modal-submit">Zum Portal</button>
+    </div>
+</div>
 
-        // Macht die Eingabe unempfindlich gegen Groß-/Kleinschreibung und Leerzeichen
-        code = code.trim().toUpperCase();
+<script>
+    // 1. Hier trägst du deine Kunden ein! (Code : Notion-Link)
+    const kundenDatenbank = {
+        "MARU-MUSTER": "https://www.notion.so/dein-muster-link",
+        "KUNDE-X": "https://www.notion.so/ein-anderer-link"
+    };
 
-        // HIER trägst du später deine Kunden ein!
-        // Format: "CODE": "NOTION-LINK"
-        const kundenDatenbank = {
-            "MARU-MUSTER": "https://www.notion.so/dein-muster-link",
-            "KUNDE-X": "https://www.notion.so/ein-anderer-link",
-            "TEST123": "https://www.notion.so/noch-ein-link"
-        };
+    const modal = document.getElementById("loginModal");
+    const modalBox = document.querySelector(".modal-box");
+    const inputField = document.getElementById("kundenCodeInput");
+    const errorText = document.getElementById("errorText");
 
-        // Prüft, ob der Code existiert
+    function openModal() {
+        modal.style.display = "flex"; // Nutzt Flexbox für perfekte Zentrierung auf dem Handy
+        setTimeout(() => {
+            modal.style.opacity = "1";
+            modalBox.style.transform = "translateY(0) scale(1)";
+        }, 10);
+        inputField.value = "";
+        errorText.style.display = "none";
+        // Fokus auf Mobilgeräten leicht verzögern, damit die Tastatur nicht ruckelt
+        setTimeout(() => inputField.focus(), 300);
+    }
+
+    function closeModal() {
+        modal.style.opacity = "0";
+        modalBox.style.transform = "translateY(20px) scale(0.95)";
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 400);
+    }
+
+    function checkCode() {
+        let code = inputField.value.trim().toUpperCase();
+        
         if (kundenDatenbank[code]) {
-            // Wenn ja, öffne den spezifischen Notion-Link in einem neuen Tab
             window.open(kundenDatenbank[code], "_blank");
+            closeModal();
         } else {
-            // Wenn nein, zeige eine Fehlermeldung
-            alert("Dieser Code ist leider ungültig. Bitte prüfe deine Eingabe.");
+            errorText.style.display = "block";
+            // Kleiner Wackel-Effekt bei falschem Code
+            modalBox.style.transform = "translateX(5px)";
+            setTimeout(() => modalBox.style.transform = "translateX(-5px)", 100);
+            setTimeout(() => modalBox.style.transform = "translateX(0)", 200);
+        }
+    }
+
+    function handleEnter(event) {
+        if (event.key === "Enter") {
+            checkCode();
+        }
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
         }
     }
 </script>
