@@ -13,7 +13,8 @@
         * {
             box-sizing: border-box;
             -webkit-font-smoothing: antialiased;
-            
+        }
+
         body {
             background-color: #FBFBFB;
             font-family: 'Inter', sans-serif;
@@ -32,7 +33,7 @@
             /* Vogel oben rechts, Flügel unten links */
             background-position: top right, bottom left;
             
-            /* Größe der Bilder (kannst du bei Bedarf etwas größer/kleiner machen) */
+            /* Größe der Bilder */
             background-size: 280px, 250px; 
         }
 
@@ -41,7 +42,7 @@
             max-width: 400px;
             padding: 40px 24px;
             text-align: center;
-            /* Damit der Text auch über den Bildern gut lesbar ist */
+            /* Damit der Text immer über den Bildern liegt */
             position: relative;
             z-index: 1;
         }
@@ -73,7 +74,7 @@
             animation: fadeInUp 0.8s ease forwards 0.3s;
         }
 
-        /* --- BUTTONS (JETZT ALLE EXAKT GLEICH GROSS) --- */
+        /* --- BUTTONS --- */
         .link-btn {
             display: block;
             width: 100%;
@@ -105,9 +106,9 @@
             box-shadow: 0 6px 16px rgba(0,0,0,0.08);
         }
 
-        /* --- NEU: ELEGANTES & MOBIL-OPTIMIERTES EINGABEFENSTER --- */
+        /* --- ELEGANTES EINGABEFENSTER (MODAL) --- */
         .modal-overlay {
-            display: none; /* Wird per JS auf 'flex' gesetzt */
+            display: none; 
             position: fixed; 
             z-index: 100; 
             left: 0; 
@@ -198,7 +199,7 @@
         
         .modal-submit {
             margin-bottom: 0;
-            animation: none; /* Verhindert doppelte Animation im Modal */
+            animation: none; 
             opacity: 1;
         }
     </style>
@@ -249,14 +250,13 @@
     const errorText = document.getElementById("errorText");
 
     function openModal() {
-        modal.style.display = "flex"; // Nutzt Flexbox für perfekte Zentrierung auf dem Handy
+        modal.style.display = "flex"; 
         setTimeout(() => {
             modal.style.opacity = "1";
             modalBox.style.transform = "translateY(0) scale(1)";
         }, 10);
         inputField.value = "";
         errorText.style.display = "none";
-        // Fokus auf Mobilgeräten leicht verzögern, damit die Tastatur nicht ruckelt
         setTimeout(() => inputField.focus(), 300);
     }
 
@@ -276,7 +276,6 @@
             closeModal();
         } else {
             errorText.style.display = "block";
-            // Kleiner Wackel-Effekt bei falschem Code
             modalBox.style.transform = "translateX(5px)";
             setTimeout(() => modalBox.style.transform = "translateX(-5px)", 100);
             setTimeout(() => modalBox.style.transform = "translateX(0)", 200);
