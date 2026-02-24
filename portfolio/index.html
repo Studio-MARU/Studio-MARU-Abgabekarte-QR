@@ -11,23 +11,21 @@
     <style>
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
-        /* NEU: Verhindert das Wackeln/Scrollen auf mobilen Geräten (Rubber-Banding) */
+        /* NEU: Sperrt die Seite absolut ab. Kein Wackeln, kein Gummi-Effekt mehr. */
         html, body {
+            height: 100dvh;
+            overflow: hidden; /* Der absolute Lock */
             overscroll-behavior: none;
-        }
-
-        body {
             background-color: #FBFBFB;
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
             color: #222222;
-            min-height: 100dvh; /* Passt sich perfekt an die mobile Adressleiste an */
         }
 
         /* --- HOME BUTTON OBEN RECHTS --- */
         .home-btn {
-            position: absolute;
+            position: fixed; /* Bleibt immer exakt da stehen */
             top: 25px;
             right: 25px;
             text-decoration: none;
@@ -45,18 +43,24 @@
 
         /* --- PROJEKT CONTAINER --- */
         .portfolio-wrapper {
-            padding: 80px 0 40px; 
+            height: 100dvh;
+            overflow-y: auto; /* Nur DIESER Bereich darf scrollen, wenn der Text ausklappt */
+            padding: 60px 0 30px; 
             max-width: 500px;
             margin: 0 auto;
-            min-height: 100dvh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            /* Versteckt die unschöne Scrollbar beim Ausklappen */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
         }
+        
+        .portfolio-wrapper::-webkit-scrollbar { display: none; }
 
         .project {
             display: none; 
             padding: 0 24px;
+            margin: auto 0; /* Perfekter Trick: Zentriert den Inhalt sicher in der Mitte */
             animation: fadeIn 0.5s ease forwards;
         }
 
@@ -75,42 +79,39 @@
             font-size: 24px;
             letter-spacing: 1px;
             margin-top: 0;
-            margin-bottom: 12px;
+            margin-bottom: 8px; /* Etwas kompakter */
             color: #1A1A1A;
         }
 
-        /* NEU: Begrenzt den Text auf exakt 3 Zeilen */
         .desc {
             font-weight: 300;
-            font-size: 15px;
+            font-size: 14px; /* Minimal kleiner für perfekte Passform */
             color: #666666;
             line-height: 1.6;
             margin-bottom: 5px; 
             display: -webkit-box;
-            -webkit-line-clamp: 3; /* Magische Zeile: Genau 3 Zeilen! */
+            -webkit-line-clamp: 3; /* Exakt 3 Zeilen */
             -webkit-box-orient: vertical;
             overflow: hidden;
             transition: all 0.3s ease;
         }
 
-        /* Wird aktiv, wenn man auf "Weiterlesen" klickt */
         .desc.expanded {
             -webkit-line-clamp: unset;
         }
 
-        /* NEU: Der Weiterlesen-Button */
         .read-more-btn {
             background: none;
             border: none;
             color: #1A1A1A;
             font-family: 'Inter', sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             text-decoration: underline;
             padding: 0;
-            margin-bottom: 25px;
+            margin-bottom: 12px;
             cursor: pointer;
-            display: none; /* Wird per JS nur eingeblendet, wenn der Text zu lang ist */
+            display: none; 
             touch-action: manipulation;
         }
 
@@ -120,7 +121,7 @@
             overflow-x: auto;
             scroll-snap-type: x mandatory; 
             gap: 16px;
-            padding-bottom: 10px; 
+            padding-bottom: 5px; 
             scrollbar-width: none; 
             -ms-overflow-style: none;
             position: relative;
@@ -129,7 +130,7 @@
         .carousel::-webkit-scrollbar { display: none; }
 
         .carousel-item {
-            flex: 0 0 85%; 
+            flex: 0 0 82%; /* Von 85 auf 82 reduziert, damit es vertikal auf jedes Handy passt */
             aspect-ratio: 4 / 5; 
             border-radius: 8px;
             overflow: hidden;
@@ -150,8 +151,8 @@
             display: flex;
             justify-content: center;
             gap: 6px;
-            margin-top: 15px;
-            margin-bottom: 25px;
+            margin-top: 12px;
+            margin-bottom: 15px;
             min-height: 6px; 
         }
 
@@ -172,7 +173,7 @@
         .nav-buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 10px;
+            margin-top: 5px;
             gap: 15px;
         }
 
@@ -209,7 +210,7 @@
 
     <a href="/" class="home-btn">Home</a>
 
-    <div class="portfolio-wrapper">
+    <div class="portfolio-wrapper" id="scrollWrapper">
 
         <div class="project active" id="projekt-1">
             <h2>Almis Berghotel</h2>
@@ -285,6 +286,7 @@
         let aktuellesProjektIndex = 0;
         const projekte = document.querySelectorAll('.project');
         let currentObserver = null; 
+        const scrollWrapper = document.getElementById('scrollWrapper');
 
         document.addEventListener('DOMContentLoaded', () => {
             initPunkteForProject(0);
@@ -302,30 +304,27 @@
             initPunkteForProject(aktuellesProjektIndex);
             checkWeiterlesen(aktuellesProjektIndex);
             
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Scrollt im Container ganz nach oben, wenn ein neues Projekt lädt
+            scrollWrapper.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // --- NEU: Prüft ob der Text länger als 3 Zeilen ist ---
         function checkWeiterlesen(index) {
             const projektDiv = projekte[index];
             const desc = projektDiv.querySelector('.desc');
             const btn = projektDiv.querySelector('.read-more-btn');
 
             if (desc && btn) {
-                // Setzt den Text erst mal wieder zurück auf 3 Zeilen
                 desc.classList.remove('expanded');
                 btn.textContent = "Weiterlesen";
                 
-                // Prüft im Hintergrund, ob der versteckte Text größer ist als die sichtbare Box
                 if (desc.scrollHeight > desc.clientHeight + 2) {
-                    btn.style.display = "inline-block"; // Button anzeigen
+                    btn.style.display = "inline-block"; 
                 } else {
-                    btn.style.display = "none"; // Button verstecken (bei kurzen Texten)
+                    btn.style.display = "none"; 
                 }
             }
         }
 
-        // --- NEU: Klappt den Text aus und ein ---
         function toggleText(btn) {
             const desc = btn.previousElementSibling;
             desc.classList.toggle('expanded');
@@ -334,10 +333,11 @@
                 btn.textContent = "Weniger anzeigen";
             } else {
                 btn.textContent = "Weiterlesen";
+                // Beim Einklappen wieder sanft nach oben scrollen
+                scrollWrapper.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
-        // Magie für die Instagram-Punkte
         function initPunkteForProject(index) {
             const projektDiv = projekte[index];
             const carousel = projektDiv.querySelector('.carousel');
