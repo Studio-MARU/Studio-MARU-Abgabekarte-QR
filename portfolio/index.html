@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>STUDIO MARU 丸 | Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +15,8 @@
             height: 100dvh;
             overflow: hidden; 
             overscroll-behavior: none;
+            /* NEU: Verbietet das Zoomen über CSS global */
+            touch-action: pan-x pan-y; 
             background-color: #FBFBFB; 
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -55,7 +57,6 @@
         
         .portfolio-wrapper::-webkit-scrollbar { display: none; }
 
-        /* --- NEUE, ELEGANTE ANIMATION --- */
         .project {
             display: none; 
             padding: 0 24px;
@@ -64,19 +65,12 @@
 
         .project.active {
             display: block; 
-            /* Hier liegt die Magie: 1 Sekunde lang, mit butterweicher Bremskurve */
             animation: smoothFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes smoothFadeIn {
-            0% { 
-                opacity: 0; 
-                transform: translateY(15px); /* Startet leicht nach unten versetzt */
-            }
-            100% { 
-                opacity: 1; 
-                transform: translateY(0); /* Gleitet in die Endposition */
-            }
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         /* --- TEXT-BOX MIT FESTER MINDESTHÖHE --- */
@@ -305,6 +299,27 @@
     </div>
 
     <script>
+        // --- NEU: ANTI-ZOOM SCHUTZSCHILD FÜR MOBILE GERÄTE ---
+        
+        // 1. Verhindert das 2-Finger-Zoomen (Pinch-to-zoom)
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        // 2. Verhindert das wilde Heranzoomen beim schnellen Doppeltippen
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+        
+        // --------------------------------------------------------
+
         let aktuellesProjektIndex = 0;
         const projekte = document.querySelectorAll('.project');
         let currentObserver = null; 
@@ -321,7 +336,6 @@
             
             aktuellesProjektIndex = aktuellesProjektIndex + richtung;
             
-            // Ein kleiner Timeout-Trick, damit die Animation jedes Mal absolut sauber neu startet
             setTimeout(() => {
                 projekte[aktuellesProjektIndex].classList.add('active');
                 initPunkteForProject(aktuellesProjektIndex);
