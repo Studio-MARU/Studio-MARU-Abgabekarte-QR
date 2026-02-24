@@ -33,18 +33,23 @@
             /* Vogel oben rechts, Flügel unten links */
             background-position: top right, bottom left;
             
-            /* GRÖSSE ANGEPASST: Oben deutlich größer (380px), unten bleibt (250px) */
+            /* Größe der Bilder (Oben größer, unten normal) */
             background-size: 380px, 250px; 
         }
 
         .container {
             width: 100%;
             max-width: 400px;
-            padding: 40px 24px;
             text-align: center;
             /* Damit der Text immer über den Bildern liegt */
             position: relative;
             z-index: 1;
+            /* --- NEU: DIE WEISSE MASKE FÜR BESSEREN KONTRAST --- */
+            background-color: rgba(255, 255, 255, 0.7); /* 70% deckendes Weiß */
+            padding: 40px 30px;
+            border-radius: 12px; /* Weiche Ecken für die Box */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Ein ganz zarter Schatten hebt die Box ab */
+            margin: 20px; /* Abstand zum Bildschirmrand auf kleinen Handys */
         }
 
         /* --- ANIMATIONEN --- */
@@ -242,7 +247,7 @@
     const kundenDatenbank = {
         "MARU-MUSTER": "https://www.notion.so/dein-muster-link",
         "KUNDE-X": "https://www.notion.so/ein-anderer-link",
-        "ALMIS": "https://lilac-feverfew-b5c.notion.site/Almis-Berghotel-310f5a498a0680f584aaf0335f906c3a?source=copy_link"
+        "ALMIS": "https://www.notion.so/Almis-Berghotel-310f5a498a0680f584aaf0335f906c3a?source=copy_link"
     };
 
     const modal = document.getElementById("loginModal");
@@ -273,8 +278,8 @@
         let code = inputField.value.trim().toUpperCase();
         
         if (kundenDatenbank[code]) {
-            window.open(kundenDatenbank[code], "_blank");
-            closeModal();
+            // Weiterleitung im selben Tab, damit es auf Handys flüssiger ist
+            window.location.href = kundenDatenbank[code];
         } else {
             errorText.style.display = "block";
             modalBox.style.transform = "translateX(5px)";
