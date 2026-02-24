@@ -38,7 +38,7 @@
 
         /* --- PROJEKT CONTAINER --- */
         .portfolio-wrapper {
-            padding: 80px 0 40px; /* Platz oben für den Home-Button */
+            padding: 80px 0 40px; 
             max-width: 500px;
             margin: 0 auto;
             min-height: 100vh;
@@ -48,18 +48,19 @@
         }
 
         .project {
-            display: none; /* Versteckt alle Projekte standardmäßig */
+            display: none; 
             padding: 0 24px;
-            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            /* Animation beim Wechseln */
+            animation: fadeIn 0.5s ease forwards;
         }
 
         .project.active {
-            display: block; /* Zeigt nur das aktive Projekt */
+            display: block; 
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* --- TYPOGRAFIE --- */
@@ -84,30 +85,63 @@
         .carousel {
             display: flex;
             overflow-x: auto;
-            scroll-snap-type: x mandatory; /* Rastet beim Wischen am Bild ein */
+            scroll-snap-type: x mandatory; /* Rastet beim Wischen ein */
             gap: 16px;
-            padding-bottom: 20px;
-            /* Versteckt die Scrollbar für einen cleanen Look */
+            padding-bottom: 10px; /* Weniger Abstand wegen den Punkten */
             scrollbar-width: none; 
             -ms-overflow-style: none;
+            /* Wichtig für die Punkte-Erkennung */
+            position: relative;
         }
         
         .carousel::-webkit-scrollbar { display: none; }
 
-        .carousel img {
-            flex: 0 0 85%; /* Zeigt 85% des Bildes, der Rest vom nächsten Bild spitzt rechts rein (animiert zum Wischen) */
-            aspect-ratio: 4 / 5; /* Zwingt alle Bilder ins 4:5 Format */
-            object-fit: cover; /* Schneidet Bilder intelligent zu, ohne sie zu verzerren */
+        /* NEU: Der Wrapper erzwingt das 4:5 Format */
+        .carousel-item {
+            flex: 0 0 85%; /* Zeigt 85% der Breite (animiert zum Wischen) */
+            aspect-ratio: 4 / 5; /* DAS IST DIE MAGISCHE ZEILE FÜR DAS FORMAT */
             border-radius: 8px;
-            scroll-snap-align: center; /* Zentriert das Bild beim Loslassen */
+            overflow: hidden;
+            scroll-snap-align: center; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            position: relative;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Füllt die 4:5 Box perfekt aus */
+            display: block;
+        }
+
+        /* --- NEU: INSTAGRAM PUNKTE (Dots) --- */
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 15px;
+            margin-bottom: 25px;
+            min-height: 6px; /* Platzhalter, falls keine Dots da sind */
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #D9D9D9; /* Inaktives Grau */
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: #766F6E; /* Aktives Dunkelgrau */
+            transform: scale(1.2); /* Wird leicht größer */
         }
 
         /* --- NAVIGATION (BLÄTTERN) --- */
         .nav-buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 10px;
             gap: 15px;
         }
 
@@ -149,10 +183,16 @@
             <h2>Almis Berghotel</h2>
             <p class="desc">Entwicklung eines modernen Brandings und Briefpapiers, das die rustikale Tradition mit cleaner Eleganz verbindet.</p>
             
-            <div class="carousel">
-                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Almis Design 1">
-                <img src="https://images.unsplash.com/photo-1586075010923-2dd4570fb338?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Almis Design 2">
+            <div class="carousel" id="carousel-1">
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Almis Design 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1586075010923-2dd4570fb338?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Almis Design 2">
+                </div>
             </div>
+
+            <div class="dots-container" id="dots-1"></div>
 
             <div class="nav-buttons">
                 <button class="nav-btn" disabled>Zurück</button>
@@ -165,11 +205,19 @@
             <h2>Kaffeehaus Wien</h2>
             <p class="desc">Neugestaltung der Speisekarten und Visitenkarten. Fokus auf hochwertige Haptik und minimalistische Typografie.</p>
             
-            <div class="carousel">
-                <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kaffeehaus 1">
-                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kaffeehaus 2">
-                <img src="https://images.unsplash.com/photo-1600612258847-19e917d84879?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kaffeehaus 3">
+            <div class="carousel" id="carousel-2">
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kaffeehaus 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kaffeehaus 2">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1600612258847-19e917d84879?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kaffeehaus 3">
+                </div>
             </div>
+
+            <div class="dots-container" id="dots-2"></div>
 
             <div class="nav-buttons">
                 <button class="nav-btn" onclick="wechsleProjekt(-1)">Zurück</button>
@@ -182,9 +230,13 @@
             <h2>Architektur Studio</h2>
             <p class="desc">Ein puristisches Corporate Design, das dem Raum und der Form den Vortritt lässt. Reduktion auf das Wesentliche.</p>
             
-            <div class="carousel">
-                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Architektur 1">
+            <div class="carousel" id="carousel-3">
+                <div class="carousel-item">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Architektur 1">
+                </div>
             </div>
+
+            <div class="dots-container" id="dots-3"></div>
 
             <div class="nav-buttons">
                 <button class="nav-btn" onclick="wechsleProjekt(-1)">Zurück</button>
@@ -195,21 +247,74 @@
     </div>
 
     <script>
-        let aktuellesProjekt = 0;
+        let aktuellesProjektIndex = 0;
         const projekte = document.querySelectorAll('.project');
+        let currentObserver = null; // Speichert den aktuellen Beobachter für die Punkte
+
+        // Startet alles beim Laden der Seite
+        document.addEventListener('DOMContentLoaded', () => {
+            initPunkteForProject(0);
+        });
 
         function wechsleProjekt(richtung) {
-            // Verstecke das aktuelle Projekt
-            projekte[aktuellesProjekt].classList.remove('active');
+            // Altes Projekt ausblenden
+            projekte[aktuellesProjektIndex].classList.remove('active');
+            // Wenn es einen alten Beobachter gab, stoppen (spart Leistung)
+            if (currentObserver) currentObserver.disconnect();
             
-            // Berechne das neue Projekt
-            aktuellesProjekt = aktuellesProjekt + richtung;
+            // Neues Projekt berechnen
+            aktuellesProjektIndex = aktuellesProjektIndex + richtung;
             
-            // Zeige das neue Projekt
-            projekte[aktuellesProjekt].classList.add('active');
+            // Neues Projekt einblenden
+            projekte[aktuellesProjektIndex].classList.add('active');
             
-            // Scrolle sanft nach oben, falls der Text sehr lang war
+            // Punkte für das neue Projekt initialisieren
+            initPunkteForProject(aktuellesProjektIndex);
+            
+            // Nach oben scrollen
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Die Magie für die Punkte
+        function initPunkteForProject(index) {
+            const projektDiv = projekte[index];
+            const carousel = projektDiv.querySelector('.carousel');
+            const items = carousel.querySelectorAll('.carousel-item');
+            const dotsContainer = projektDiv.querySelector('.dots-container');
+
+            // Erstmal aufräumen
+            dotsContainer.innerHTML = '';
+
+            // Wenn nur 1 oder 0 Bilder, brauchen wir keine Punkte
+            if (items.length <= 1) return;
+
+            // Punkte erstellen
+            items.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (i === 0) dot.classList.add('active'); // Erster Punkt aktiv
+                dotsContainer.appendChild(dot);
+            });
+
+            // Beobachter: Erkennt, welches Bild gerade sichtbar ist
+            currentObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Finde heraus, welches Bild das ist (Index 0, 1, 2...)
+                        const itemIndex = Array.from(items).indexOf(entry.target);
+                        // Alle Punkte aktualisieren
+                        dotsContainer.querySelectorAll('.dot').forEach((d, dotIndex) => {
+                           d.classList.toggle('active', dotIndex === itemIndex);
+                        });
+                    }
+                });
+            }, { 
+                root: carousel, 
+                threshold: 0.6 // Wenn 60% des Bildes sichtbar sind, gilt es als "aktiv"
+            });
+
+            // Alle Bilder dem Beobachter hinzufügen
+            items.forEach(item => currentObserver.observe(item));
         }
     </script>
 
