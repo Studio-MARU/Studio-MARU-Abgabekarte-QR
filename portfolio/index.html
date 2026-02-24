@@ -11,10 +11,9 @@
     <style>
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
-        /* NEU: Sperrt die Seite absolut ab. Kein Wackeln, kein Gummi-Effekt mehr. */
         html, body {
             height: 100dvh;
-            overflow: hidden; /* Der absolute Lock */
+            overflow: hidden; 
             overscroll-behavior: none;
             background-color: #FBFBFB;
             font-family: 'Inter', sans-serif;
@@ -25,7 +24,7 @@
 
         /* --- HOME BUTTON OBEN RECHTS --- */
         .home-btn {
-            position: fixed; /* Bleibt immer exakt da stehen */
+            position: fixed; 
             top: 25px;
             right: 25px;
             text-decoration: none;
@@ -44,13 +43,12 @@
         /* --- PROJEKT CONTAINER --- */
         .portfolio-wrapper {
             height: 100dvh;
-            overflow-y: auto; /* Nur DIESER Bereich darf scrollen, wenn der Text ausklappt */
+            overflow-y: auto; 
             padding: 60px 0 30px; 
             max-width: 500px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            /* Versteckt die unschöne Scrollbar beim Ausklappen */
             scrollbar-width: none; 
             -ms-overflow-style: none;
         }
@@ -60,7 +58,7 @@
         .project {
             display: none; 
             padding: 0 24px;
-            margin: auto 0; /* Perfekter Trick: Zentriert den Inhalt sicher in der Mitte */
+            margin: auto 0; 
             animation: fadeIn 0.5s ease forwards;
         }
 
@@ -79,18 +77,18 @@
             font-size: 24px;
             letter-spacing: 1px;
             margin-top: 0;
-            margin-bottom: 8px; /* Etwas kompakter */
+            margin-bottom: 8px; 
             color: #1A1A1A;
         }
 
         .desc {
             font-weight: 300;
-            font-size: 14px; /* Minimal kleiner für perfekte Passform */
+            font-size: 14px; 
             color: #666666;
             line-height: 1.6;
             margin-bottom: 5px; 
             display: -webkit-box;
-            -webkit-line-clamp: 3; /* Exakt 3 Zeilen */
+            -webkit-line-clamp: 3; 
             -webkit-box-orient: vertical;
             overflow: hidden;
             transition: all 0.3s ease;
@@ -125,18 +123,28 @@
             scrollbar-width: none; 
             -ms-overflow-style: none;
             position: relative;
+            /* NEU: Macht den Mauszeiger zur Greif-Hand für Desktop */
+            cursor: grab;
+        }
+
+        /* Wenn man mit der Maus klickt und zieht */
+        .carousel:active {
+            cursor: grabbing;
         }
         
         .carousel::-webkit-scrollbar { display: none; }
 
         .carousel-item {
-            flex: 0 0 82%; /* Von 85 auf 82 reduziert, damit es vertikal auf jedes Handy passt */
+            flex: 0 0 82%; 
             aspect-ratio: 4 / 5; 
             border-radius: 8px;
             overflow: hidden;
             scroll-snap-align: center; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.06);
             position: relative;
+            /* Verhindert, dass man beim Ziehen aus Versehen das Bild markiert */
+            user-select: none;
+            -webkit-user-drag: none; 
         }
 
         .carousel-item img {
@@ -144,6 +152,7 @@
             height: 100%;
             object-fit: cover; 
             display: block;
+            pointer-events: none; /* Wichtig für das sanfte Ziehen mit der Maus */
         }
 
         /* --- INSTAGRAM PUNKTE (Dots) --- */
@@ -162,6 +171,8 @@
             border-radius: 50%;
             background-color: #D9D9D9; 
             transition: all 0.3s ease;
+            /* NEU: Zeigt am Desktop an, dass die Punkte klickbar sind */
+            cursor: pointer;
         }
 
         .dot.active {
@@ -304,7 +315,6 @@
             initPunkteForProject(aktuellesProjektIndex);
             checkWeiterlesen(aktuellesProjektIndex);
             
-            // Scrollt im Container ganz nach oben, wenn ein neues Projekt lädt
             scrollWrapper.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -333,7 +343,6 @@
                 btn.textContent = "Weniger anzeigen";
             } else {
                 btn.textContent = "Weiterlesen";
-                // Beim Einklappen wieder sanft nach oben scrollen
                 scrollWrapper.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
@@ -348,10 +357,16 @@
 
             if (items.length <= 1) return;
 
-            items.forEach((_, i) => {
+            items.forEach((item, i) => {
                 const dot = document.createElement('div');
                 dot.classList.add('dot');
                 if (i === 0) dot.classList.add('active'); 
+                
+                // NEU: Punkte klickbar machen
+                dot.addEventListener('click', () => {
+                    item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                });
+                
                 dotsContainer.appendChild(dot);
             });
 
@@ -370,6 +385,39 @@
             });
 
             items.forEach(item => currentObserver.observe(item));
+
+            // --- NEU: Desktop Drag-to-Scroll Logik ---
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            carousel.addEventListener('mousedown', (e) => {
+                isDown = true;
+                // Deaktiviert das Snap-Verhalten kurz während des Ziehens für ein weiches Gefühl
+                carousel.style.scrollSnapType = 'none'; 
+                startX = e.pageX - carousel.offsetLeft;
+                scrollLeft = carousel.scrollLeft;
+            });
+
+            carousel.addEventListener('mouseleave', () => {
+                if(!isDown) return;
+                isDown = false;
+                carousel.style.scrollSnapType = 'x mandatory';
+            });
+
+            carousel.addEventListener('mouseup', () => {
+                if(!isDown) return;
+                isDown = false;
+                carousel.style.scrollSnapType = 'x mandatory';
+            });
+
+            carousel.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - carousel.offsetLeft;
+                const walk = (x - startX) * 2; // Die 2 macht das Wischen etwas schneller
+                carousel.scrollLeft = scrollLeft - walk;
+            });
         }
     </script>
 
