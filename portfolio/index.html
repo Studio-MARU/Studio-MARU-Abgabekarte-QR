@@ -55,20 +55,28 @@
         
         .portfolio-wrapper::-webkit-scrollbar { display: none; }
 
+        /* --- NEUE, ELEGANTE ANIMATION --- */
         .project {
             display: none; 
             padding: 0 24px;
             margin: auto 0; 
-            animation: fadeIn 0.5s ease forwards;
         }
 
         .project.active {
             display: block; 
+            /* Hier liegt die Magie: 1 Sekunde lang, mit butterweicher Bremskurve */
+            animation: smoothFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @keyframes smoothFadeIn {
+            0% { 
+                opacity: 0; 
+                transform: translateY(15px); /* Startet leicht nach unten versetzt */
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0); /* Gleitet in die Endposition */
+            }
         }
 
         /* --- TEXT-BOX MIT FESTER MINDESTHÖHE --- */
@@ -183,7 +191,7 @@
         .nav-buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 50px; /* HIER WURDE DER ABSTAND EXTREM VERGRÖSSERT */
+            margin-top: 50px; 
             gap: 15px;
         }
 
@@ -313,12 +321,13 @@
             
             aktuellesProjektIndex = aktuellesProjektIndex + richtung;
             
-            projekte[aktuellesProjektIndex].classList.add('active');
-            
-            initPunkteForProject(aktuellesProjektIndex);
-            checkWeiterlesen(aktuellesProjektIndex);
-            
-            scrollWrapper.scrollTo({ top: 0, behavior: 'smooth' });
+            // Ein kleiner Timeout-Trick, damit die Animation jedes Mal absolut sauber neu startet
+            setTimeout(() => {
+                projekte[aktuellesProjektIndex].classList.add('active');
+                initPunkteForProject(aktuellesProjektIndex);
+                checkWeiterlesen(aktuellesProjektIndex);
+                scrollWrapper.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 50);
         }
 
         function checkWeiterlesen(index) {
