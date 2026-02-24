@@ -15,7 +15,7 @@
             height: 100dvh;
             overflow: hidden; 
             overscroll-behavior: none;
-            background-color: #FBFBFB; /* Dein gewünschter Hintergrund */
+            background-color: #FBFBFB; 
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
@@ -139,10 +139,9 @@
         .carousel-item {
             flex: 0 0 82%; 
             aspect-ratio: 4 / 5; 
-            border-radius: 0; /* HIER GEÄNDERT: Harte, eckige Kanten */
+            border-radius: 0; 
             overflow: hidden;
             scroll-snap-align: center; 
-            /* HIER GEÄNDERT: Schatten komplett entfernt für reines #FBFBFB */
             position: relative;
             user-select: none;
             -webkit-user-drag: none; 
@@ -162,7 +161,7 @@
             justify-content: center;
             gap: 6px;
             margin-top: 14px;
-            margin-bottom: 25px; 
+            margin-bottom: 10px; 
             min-height: 6px; 
         }
 
@@ -184,7 +183,7 @@
         .nav-buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px; 
+            margin-top: 50px; /* HIER WURDE DER ABSTAND EXTREM VERGRÖSSERT */
             gap: 15px;
         }
 
