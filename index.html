@@ -15,6 +15,11 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* NEU: Verhindert den Gummi-Wackel-Effekt (Rubber-Banding) auf dem Handy */
+        html, body {
+            overscroll-behavior: none;
+        }
+
         body {
             background-color: #FBFBFB;
             font-family: 'Inter', sans-serif;
@@ -23,7 +28,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            /* NEU: 100dvh (Dynamic Viewport Height) passt sich perfekt an die mobile Adressleiste an */
+            min-height: 100dvh;
             color: #222222;
             
             /* DEINE ZWEI BILDER */
@@ -43,7 +49,6 @@
             text-align: center;
             position: relative;
             z-index: 1;
-            /* DIE WEISSE MASKE FÜR BESSEREN KONTRAST */
             background-color: rgba(255, 255, 255, 0.75); 
             padding: 40px 30px;
             border-radius: 12px; 
@@ -97,7 +102,7 @@
             opacity: 0;
             animation: fadeInUp 0.8s ease forwards;
             text-align: center;
-            /* NEU: Verhindert den Doppeltipp-Zoom auf allen Buttons */
+            /* Verhindert den Doppeltipp-Zoom auf allen Buttons */
             touch-action: manipulation;
         }
 
@@ -170,7 +175,7 @@
             cursor: pointer;
             transition: color 0.2s;
             line-height: 1;
-            /* NEU: Auch das Schließen-X verhindert den Zoom */
+            /* Auch das Schließen-X verhindert den Zoom */
             touch-action: manipulation;
         }
 
