@@ -15,7 +15,7 @@
             height: 100dvh;
             overflow: hidden; 
             overscroll-behavior: none;
-            background-color: #FBFBFB;
+            background-color: #FBFBFB; /* Dein gewünschter Hintergrund */
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
@@ -139,10 +139,10 @@
         .carousel-item {
             flex: 0 0 82%; 
             aspect-ratio: 4 / 5; 
-            border-radius: 8px;
+            border-radius: 0; /* HIER GEÄNDERT: Harte, eckige Kanten */
             overflow: hidden;
             scroll-snap-align: center; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            /* HIER GEÄNDERT: Schatten komplett entfernt für reines #FBFBFB */
             position: relative;
             user-select: none;
             -webkit-user-drag: none; 
@@ -162,7 +162,7 @@
             justify-content: center;
             gap: 6px;
             margin-top: 14px;
-            margin-bottom: 25px; /* MEHR ABSTAND NACH UNTEN */
+            margin-bottom: 25px; 
             min-height: 6px; 
         }
 
@@ -184,7 +184,7 @@
         .nav-buttons {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px; /* HIER WURDE DER ABSTAND DEUTLICH ERHÖHT */
+            margin-top: 20px; 
             gap: 15px;
         }
 
@@ -205,7 +205,6 @@
         .nav-btn:hover {
             background-color: #5c5655;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
         }
 
         .nav-btn:disabled {
@@ -213,7 +212,6 @@
             color: #A0A0A0;
             cursor: not-allowed;
             transform: none;
-            box-shadow: none;
         }
     </style>
 </head>
