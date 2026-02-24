@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>STUDIO MARU 丸 | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+        body {
+            background-color: #FBFBFB;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #222222;
+        }
+
+        /* --- HOME BUTTON OBEN RECHTS --- */
+        .home-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            text-decoration: none;
+            color: #666666;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            z-index: 100;
+            transition: color 0.3s ease;
+        }
+
+        .home-btn:hover { color: #1A1A1A; }
+
+        /* --- PROJEKT CONTAINER --- */
+        .portfolio-wrapper {
+            padding: 80px 0 40px; /* Platz oben für den Home-Button */
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .project {
+            display: none; /* Versteckt alle Projekte standardmäßig */
+            padding: 0 24px;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .project.active {
+            display: block; /* Zeigt nur das aktive Projekt */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* --- TYPOGRAFIE --- */
+        h2 {
+            font-weight: 500;
+            font-size: 24px;
+            letter-spacing: 1px;
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: #1A1A1A;
+        }
+
+        .desc {
+            font-weight: 300;
+            font-size: 15px;
+            color: #666666;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        /* --- BILDER KARUSSELL (WISCHBAR) --- */
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory; /* Rastet beim Wischen am Bild ein */
+            gap: 16px;
+            padding-bottom: 20px;
+            /* Versteckt die Scrollbar für einen cleanen Look */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+        
+        .carousel::-webkit-scrollbar { display: none; }
+
+        .carousel img {
+            flex: 0 0 85%; /* Zeigt 85% des Bildes, der Rest vom nächsten Bild spitzt rechts rein (animiert zum Wischen) */
+            aspect-ratio: 4 / 5; /* Zwingt alle Bilder ins 4:5 Format */
+            object-fit: cover; /* Schneidet Bilder intelligent zu, ohne sie zu verzerren */
+            border-radius: 8px;
+            scroll-snap-align: center; /* Zentriert das Bild beim Loslassen */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        }
+
+        /* --- NAVIGATION (BLÄTTERN) --- */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 16px;
+            background-color: #766F6E;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: #5c5655;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+
+        .nav-btn:disabled {
+            background-color: #EAEAEA;
+            color: #A0A0A0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="/" class="home-btn">Home</a>
+
+    <div class="portfolio-wrapper">
+
+        <div class="project active" id="projekt-1">
+            <h2>Almis Berghotel</h2>
+            <p class="desc">Entwicklung eines modernen Brandings und Briefpapiers, das die rustikale Tradition mit cleaner Eleganz verbindet.</p>
+            
+            <div class="carousel">
+                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Almis Design 1">
+                <img src="https://images.unsplash.com/photo-1586075010923-2dd4570fb338?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Almis Design 2">
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn" disabled>Zurück</button>
+                <button class="nav-btn" onclick="wechsleProjekt(1)">Nächstes Projekt</button>
+            </div>
+        </div>
+
+
+        <div class="project" id="projekt-2">
+            <h2>Kaffeehaus Wien</h2>
+            <p class="desc">Neugestaltung der Speisekarten und Visitenkarten. Fokus auf hochwertige Haptik und minimalistische Typografie.</p>
+            
+            <div class="carousel">
+                <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kaffeehaus 1">
+                <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kaffeehaus 2">
+                <img src="https://images.unsplash.com/photo-1600612258847-19e917d84879?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kaffeehaus 3">
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="wechsleProjekt(-1)">Zurück</button>
+                <button class="nav-btn" onclick="wechsleProjekt(1)">Nächstes Projekt</button>
+            </div>
+        </div>
+
+
+        <div class="project" id="projekt-3">
+            <h2>Architektur Studio</h2>
+            <p class="desc">Ein puristisches Corporate Design, das dem Raum und der Form den Vortritt lässt. Reduktion auf das Wesentliche.</p>
+            
+            <div class="carousel">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Architektur 1">
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="wechsleProjekt(-1)">Zurück</button>
+                <button class="nav-btn" disabled>Ende</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let aktuellesProjekt = 0;
+        const projekte = document.querySelectorAll('.project');
+
+        function wechsleProjekt(richtung) {
+            // Verstecke das aktuelle Projekt
+            projekte[aktuellesProjekt].classList.remove('active');
+            
+            // Berechne das neue Projekt
+            aktuellesProjekt = aktuellesProjekt + richtung;
+            
+            // Zeige das neue Projekt
+            projekte[aktuellesProjekt].classList.add('active');
+            
+            // Scrolle sanft nach oben, falls der Text sehr lang war
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+</html>
