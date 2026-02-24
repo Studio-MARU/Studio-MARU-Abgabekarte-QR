@@ -11,12 +11,18 @@
     <style>
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
+        /* NEU: Verhindert das Wackeln/Scrollen auf mobilen Geräten (Rubber-Banding) */
+        html, body {
+            overscroll-behavior: none;
+        }
+
         body {
             background-color: #FBFBFB;
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
             color: #222222;
+            min-height: 100dvh; /* Passt sich perfekt an die mobile Adressleiste an */
         }
 
         /* --- HOME BUTTON OBEN RECHTS --- */
@@ -32,7 +38,6 @@
             text-transform: uppercase;
             z-index: 100;
             transition: color 0.3s ease;
-            /* NEU: Verhindert den Doppeltipp-Zoom */
             touch-action: manipulation;
         }
 
@@ -43,7 +48,7 @@
             padding: 80px 0 40px; 
             max-width: 500px;
             margin: 0 auto;
-            min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -64,7 +69,7 @@
             to { opacity: 1; }
         }
 
-        /* --- TYPOGRAFIE --- */
+        /* --- TYPOGRAFIE & "WEITERLESEN" --- */
         h2 {
             font-weight: 500;
             font-size: 24px;
@@ -74,15 +79,42 @@
             color: #1A1A1A;
         }
 
+        /* NEU: Begrenzt den Text auf exakt 3 Zeilen */
         .desc {
             font-weight: 300;
             font-size: 15px;
             color: #666666;
             line-height: 1.6;
-            margin-bottom: 35px;
+            margin-bottom: 5px; 
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* Magische Zeile: Genau 3 Zeilen! */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        /* --- BILDER KARUSSELL (WISCHBAR) --- */
+        /* Wird aktiv, wenn man auf "Weiterlesen" klickt */
+        .desc.expanded {
+            -webkit-line-clamp: unset;
+        }
+
+        /* NEU: Der Weiterlesen-Button */
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: #1A1A1A;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: underline;
+            padding: 0;
+            margin-bottom: 25px;
+            cursor: pointer;
+            display: none; /* Wird per JS nur eingeblendet, wenn der Text zu lang ist */
+            touch-action: manipulation;
+        }
+
+        /* --- BILDER KARUSSELL --- */
         .carousel {
             display: flex;
             overflow-x: auto;
@@ -155,7 +187,6 @@
             font-size: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
-            /* NEU: Verhindert den Doppeltipp-Zoom und macht den Klick schneller */
             touch-action: manipulation;
         }
 
@@ -182,7 +213,8 @@
 
         <div class="project active" id="projekt-1">
             <h2>Almis Berghotel</h2>
-            <p class="desc">Entwicklung eines modernen Brandings und Briefpapiers, das die rustikale Tradition mit cleaner Eleganz verbindet.</p>
+            <p class="desc">Entwicklung eines modernen Brandings und Briefpapiers, das die rustikale Tradition mit cleaner Eleganz verbindet. Wir haben uns besonders auf eine reduzierte Farbpalette fokussiert, um die Architektur des Hauses in den Vordergrund zu stellen. Jedes Detail, von der Visitenkarte bis hin zur Speisekarte, wurde mit größter Sorgfalt und einem Blick für das Wesentliche konzipiert.</p>
+            <button class="read-more-btn" onclick="toggleText(this)">Weiterlesen</button>
             
             <div class="carousel" id="carousel-1">
                 <div class="carousel-item">
@@ -205,6 +237,7 @@
         <div class="project" id="projekt-2">
             <h2>Kaffeehaus Wien</h2>
             <p class="desc">Neugestaltung der Speisekarten und Visitenkarten. Fokus auf hochwertige Haptik und minimalistische Typografie.</p>
+            <button class="read-more-btn" onclick="toggleText(this)">Weiterlesen</button>
             
             <div class="carousel" id="carousel-2">
                 <div class="carousel-item">
@@ -230,6 +263,7 @@
         <div class="project" id="projekt-3">
             <h2>Architektur Studio</h2>
             <p class="desc">Ein puristisches Corporate Design, das dem Raum und der Form den Vortritt lässt. Reduktion auf das Wesentliche.</p>
+            <button class="read-more-btn" onclick="toggleText(this)">Weiterlesen</button>
             
             <div class="carousel" id="carousel-3">
                 <div class="carousel-item">
@@ -254,6 +288,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             initPunkteForProject(0);
+            checkWeiterlesen(0);
         });
 
         function wechsleProjekt(richtung) {
@@ -265,10 +300,44 @@
             projekte[aktuellesProjektIndex].classList.add('active');
             
             initPunkteForProject(aktuellesProjektIndex);
+            checkWeiterlesen(aktuellesProjektIndex);
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // --- NEU: Prüft ob der Text länger als 3 Zeilen ist ---
+        function checkWeiterlesen(index) {
+            const projektDiv = projekte[index];
+            const desc = projektDiv.querySelector('.desc');
+            const btn = projektDiv.querySelector('.read-more-btn');
+
+            if (desc && btn) {
+                // Setzt den Text erst mal wieder zurück auf 3 Zeilen
+                desc.classList.remove('expanded');
+                btn.textContent = "Weiterlesen";
+                
+                // Prüft im Hintergrund, ob der versteckte Text größer ist als die sichtbare Box
+                if (desc.scrollHeight > desc.clientHeight + 2) {
+                    btn.style.display = "inline-block"; // Button anzeigen
+                } else {
+                    btn.style.display = "none"; // Button verstecken (bei kurzen Texten)
+                }
+            }
+        }
+
+        // --- NEU: Klappt den Text aus und ein ---
+        function toggleText(btn) {
+            const desc = btn.previousElementSibling;
+            desc.classList.toggle('expanded');
+            
+            if (desc.classList.contains('expanded')) {
+                btn.textContent = "Weniger anzeigen";
+            } else {
+                btn.textContent = "Weiterlesen";
+            }
+        }
+
+        // Magie für die Instagram-Punkte
         function initPunkteForProject(index) {
             const projektDiv = projekte[index];
             const carousel = projektDiv.querySelector('.carousel');
