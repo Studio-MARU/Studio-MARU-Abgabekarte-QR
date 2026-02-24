@@ -26,14 +26,14 @@
             min-height: 100vh;
             color: #222222;
             
-            /* HIER SIND DEINE ZWEI BILDER */
+            /* DEINE ZWEI BILDER */
             background-image: url('Oben.png'), url('unten.png');
             background-repeat: no-repeat, no-repeat;
             
             /* Vogel oben rechts, Flügel unten links */
             background-position: top right, bottom left;
             
-            /* Größe der Bilder (Oben größer, unten normal) */
+            /* Größe der Bilder */
             background-size: 380px, 250px; 
         }
 
@@ -41,15 +41,14 @@
             width: 100%;
             max-width: 400px;
             text-align: center;
-            /* Damit der Text immer über den Bildern liegt */
             position: relative;
             z-index: 1;
-            /* --- NEU: DIE WEISSE MASKE FÜR BESSEREN KONTRAST --- */
-            background-color: rgba(255, 255, 255, 0.7); /* 70% deckendes Weiß */
+            /* DIE WEISSE MASKE FÜR BESSEREN KONTRAST */
+            background-color: rgba(255, 255, 255, 0.75); 
             padding: 40px 30px;
-            border-radius: 12px; /* Weiche Ecken für die Box */
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Ein ganz zarter Schatten hebt die Box ab */
-            margin: 20px; /* Abstand zum Bildschirmrand auf kleinen Handys */
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            margin: 20px; 
         }
 
         /* --- ANIMATIONEN --- */
@@ -100,10 +99,12 @@
             text-align: center;
         }
 
+        /* JETZT 5 STUFEN FÜR DIE ANIMATION */
         .btn-1 { animation-delay: 0.4s; }
         .btn-2 { animation-delay: 0.5s; }
         .btn-3 { animation-delay: 0.6s; }
         .btn-4 { animation-delay: 0.7s; }
+        .btn-5 { animation-delay: 0.8s; }
 
         .link-btn:hover {
             background-color: #5c5655;
@@ -224,9 +225,10 @@
     <p class="slogan">Klarheit in jedem Detail. Lass uns gemeinsam deine nächste Vision zum Leben erwecken.</p>
     
     <a href="https://calendly.com/studiomaru-info/30min" class="link-btn btn-1" target="_blank">Kostenloses Erstgespräch</a>
-    <button onclick="openModal()" class="link-btn btn-2">Kundenportal</button>
-    <a href="mailto:info@studiomaru.at" class="link-btn btn-3">E-Mail senden</a>
-    <a href="https://wa.me/436642766355" class="link-btn btn-4">WhatsApp Anfrage</a>
+    <a href="/portfolio" class="link-btn btn-2">Unsere Arbeiten</a>
+    <button onclick="openModal()" class="link-btn btn-3">Kundenportal</button>
+    <a href="mailto:info@studiomaru.at" class="link-btn btn-4">E-Mail senden</a>
+    <a href="https://wa.me/436642766355" class="link-btn btn-5">WhatsApp Anfrage</a>
 </div>
 
 <div id="loginModal" class="modal-overlay">
@@ -243,7 +245,7 @@
 </div>
 
 <script>
-    // 1. Hier trägst du deine Kunden ein! (Code : Notion-Link)
+    // Deine Kunden-Datenbank
     const kundenDatenbank = {
         "MARU-MUSTER": "https://www.notion.so/dein-muster-link",
         "KUNDE-X": "https://www.notion.so/ein-anderer-link",
@@ -278,7 +280,6 @@
         let code = inputField.value.trim().toUpperCase();
         
         if (kundenDatenbank[code]) {
-            // Weiterleitung im selben Tab, damit es auf Handys flüssiger ist
             window.location.href = kundenDatenbank[code];
         } else {
             errorText.style.display = "block";
