@@ -32,6 +32,8 @@
             text-transform: uppercase;
             z-index: 100;
             transition: color 0.3s ease;
+            /* NEU: Verhindert den Doppeltipp-Zoom */
+            touch-action: manipulation;
         }
 
         .home-btn:hover { color: #1A1A1A; }
@@ -50,7 +52,6 @@
         .project {
             display: none; 
             padding: 0 24px;
-            /* Animation beim Wechseln */
             animation: fadeIn 0.5s ease forwards;
         }
 
@@ -85,21 +86,19 @@
         .carousel {
             display: flex;
             overflow-x: auto;
-            scroll-snap-type: x mandatory; /* Rastet beim Wischen ein */
+            scroll-snap-type: x mandatory; 
             gap: 16px;
-            padding-bottom: 10px; /* Weniger Abstand wegen den Punkten */
+            padding-bottom: 10px; 
             scrollbar-width: none; 
             -ms-overflow-style: none;
-            /* Wichtig für die Punkte-Erkennung */
             position: relative;
         }
         
         .carousel::-webkit-scrollbar { display: none; }
 
-        /* NEU: Der Wrapper erzwingt das 4:5 Format */
         .carousel-item {
-            flex: 0 0 85%; /* Zeigt 85% der Breite (animiert zum Wischen) */
-            aspect-ratio: 4 / 5; /* DAS IST DIE MAGISCHE ZEILE FÜR DAS FORMAT */
+            flex: 0 0 85%; 
+            aspect-ratio: 4 / 5; 
             border-radius: 8px;
             overflow: hidden;
             scroll-snap-align: center; 
@@ -110,31 +109,31 @@
         .carousel-item img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Füllt die 4:5 Box perfekt aus */
+            object-fit: cover; 
             display: block;
         }
 
-        /* --- NEU: INSTAGRAM PUNKTE (Dots) --- */
+        /* --- INSTAGRAM PUNKTE (Dots) --- */
         .dots-container {
             display: flex;
             justify-content: center;
             gap: 6px;
             margin-top: 15px;
             margin-bottom: 25px;
-            min-height: 6px; /* Platzhalter, falls keine Dots da sind */
+            min-height: 6px; 
         }
 
         .dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background-color: #D9D9D9; /* Inaktives Grau */
+            background-color: #D9D9D9; 
             transition: all 0.3s ease;
         }
 
         .dot.active {
-            background-color: #766F6E; /* Aktives Dunkelgrau */
-            transform: scale(1.2); /* Wird leicht größer */
+            background-color: #766F6E; 
+            transform: scale(1.2); 
         }
 
         /* --- NAVIGATION (BLÄTTERN) --- */
@@ -156,6 +155,8 @@
             font-size: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
+            /* NEU: Verhindert den Doppeltipp-Zoom und macht den Klick schneller */
+            touch-action: manipulation;
         }
 
         .nav-btn:hover {
@@ -249,60 +250,46 @@
     <script>
         let aktuellesProjektIndex = 0;
         const projekte = document.querySelectorAll('.project');
-        let currentObserver = null; // Speichert den aktuellen Beobachter für die Punkte
+        let currentObserver = null; 
 
-        // Startet alles beim Laden der Seite
         document.addEventListener('DOMContentLoaded', () => {
             initPunkteForProject(0);
         });
 
         function wechsleProjekt(richtung) {
-            // Altes Projekt ausblenden
             projekte[aktuellesProjektIndex].classList.remove('active');
-            // Wenn es einen alten Beobachter gab, stoppen (spart Leistung)
             if (currentObserver) currentObserver.disconnect();
             
-            // Neues Projekt berechnen
             aktuellesProjektIndex = aktuellesProjektIndex + richtung;
             
-            // Neues Projekt einblenden
             projekte[aktuellesProjektIndex].classList.add('active');
             
-            // Punkte für das neue Projekt initialisieren
             initPunkteForProject(aktuellesProjektIndex);
             
-            // Nach oben scrollen
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Die Magie für die Punkte
         function initPunkteForProject(index) {
             const projektDiv = projekte[index];
             const carousel = projektDiv.querySelector('.carousel');
             const items = carousel.querySelectorAll('.carousel-item');
             const dotsContainer = projektDiv.querySelector('.dots-container');
 
-            // Erstmal aufräumen
             dotsContainer.innerHTML = '';
 
-            // Wenn nur 1 oder 0 Bilder, brauchen wir keine Punkte
             if (items.length <= 1) return;
 
-            // Punkte erstellen
             items.forEach((_, i) => {
                 const dot = document.createElement('div');
                 dot.classList.add('dot');
-                if (i === 0) dot.classList.add('active'); // Erster Punkt aktiv
+                if (i === 0) dot.classList.add('active'); 
                 dotsContainer.appendChild(dot);
             });
 
-            // Beobachter: Erkennt, welches Bild gerade sichtbar ist
             currentObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // Finde heraus, welches Bild das ist (Index 0, 1, 2...)
                         const itemIndex = Array.from(items).indexOf(entry.target);
-                        // Alle Punkte aktualisieren
                         dotsContainer.querySelectorAll('.dot').forEach((d, dotIndex) => {
                            d.classList.toggle('active', dotIndex === itemIndex);
                         });
@@ -310,10 +297,9 @@
                 });
             }, { 
                 root: carousel, 
-                threshold: 0.6 // Wenn 60% des Bildes sichtbar sind, gilt es als "aktiv"
+                threshold: 0.6 
             });
 
-            // Alle Bilder dem Beobachter hinzufügen
             items.forEach(item => currentObserver.observe(item));
         }
     </script>
