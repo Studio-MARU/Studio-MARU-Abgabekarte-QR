@@ -2,47 +2,144 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>STUDIO MARU 丸 | Kontakt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>STUDIO MARU 丸 | Coming Soon</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
-        /* --- GRUNDLEGENDE REPARATUR FÜR MOBILE & BUTTON-GRÖSSEN --- */
-        * {
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-        }
+        /* --- GRUNDLEGENDE EINSTELLUNGEN --- */
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
-        /* NEU: Verhindert den Gummi-Wackel-Effekt (Rubber-Banding) auf dem Handy */
         html, body {
-            overscroll-behavior: none;
-        }
-
-        body {
-            background-color: #FBFBFB;
+            background-color: #FBFBFB; 
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
+            color: #222222;
+        }
+
+        /* ========================================= */
+        /* --- COMING SOON OVERLAY --- */
+        /* ========================================= */
+        .coming-soon-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background-color: #FBFBFB;
+            z-index: 9999; 
             display: flex;
             justify-content: center;
             align-items: center;
-            /* NEU: 100dvh (Dynamic Viewport Height) passt sich perfekt an die mobile Adressleiste an */
-            min-height: 100dvh;
-            color: #222222;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
             
-            /* DEINE ZWEI BILDER */
+            overflow: hidden; 
+            overscroll-behavior: none;
+            touch-action: pan-x pan-y; 
+
             background-image: url('Oben.png'), url('unten.png');
             background-repeat: no-repeat, no-repeat;
-            
-            /* Vogel oben rechts, Flügel unten links */
             background-position: top right, bottom left;
-            
-            /* Größe der Bilder */
             background-size: 380px, 250px; 
         }
 
+        .coming-soon-box {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.85); 
+            padding: 50px 40px 30px; /* Unten etwas weniger Padding für den Login-Button */
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            margin: 20px; 
+            z-index: 10000;
+            
+            opacity: 0;
+            animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .coming-soon-box h1 {
+            font-weight: 500;
+            font-size: 26px;
+            letter-spacing: 1.5px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #1A1A1A;
+        }
+
+        .coming-soon-box .message {
+            font-weight: 300;
+            font-size: 16px;
+            color: #666666;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #766F6E;
+            border-radius: 50%;
+            margin-left: 4px;
+            margin-bottom: 2px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+
+        /* --- NEU: GEHEIMER ADMIN LOGIN --- */
+        .admin-trigger {
+            margin-top: 35px;
+            font-size: 11px;
+            color: #CCCCCC;
+            cursor: pointer;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .admin-trigger:hover {
+            color: #766F6E;
+        }
+
+        .admin-input-wrapper {
+            display: none;
+            margin-top: 25px;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .admin-input {
+            width: 120px;
+            padding: 10px;
+            border: 1px solid #EAEAEA;
+            border-radius: 6px;
+            background-color: #FBFBFB;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px; /* Wichtig: Verhindert Zoom auf iOS */
+            text-align: center;
+            letter-spacing: 2px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .admin-input:focus {
+            border-color: #766F6E;
+            background-color: #FFFFFF;
+        }
+
+        /* --- STYLES FÜR DEINEN ECHTEN INHALT --- */
         .container {
             width: 100%;
             max-width: 400px;
@@ -56,260 +153,169 @@
             margin: 20px; 
         }
 
-        /* --- ANIMATIONEN --- */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
-            font-weight: 500;
-            font-size: 26px;
-            letter-spacing: 1.5px;
-            margin-top: 0;
-            margin-bottom: 12px;
-            color: #1A1A1A;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease forwards 0.1s;
-        }
-
-        .slogan {
-            font-weight: 400;
-            font-size: 15px;
-            color: #666666;
-            line-height: 1.6;
-            margin-bottom: 45px;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease forwards 0.3s;
-        }
-
-        /* --- BUTTONS --- */
-        .link-btn {
-            display: block;
-            width: 100%;
-            background-color: #766F6E;
-            color: #FFFFFF;
-            text-decoration: none;
-            padding: 16px 20px;
-            margin-bottom: 16px;
-            border-radius: 6px;
-            font-weight: 400;
-            font-size: 16px;
-            font-family: 'Inter', sans-serif;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease forwards;
-            text-align: center;
-            /* Verhindert den Doppeltipp-Zoom auf allen Buttons */
-            touch-action: manipulation;
-        }
-
-        /* 5 STUFEN FÜR DIE ANIMATION */
-        .btn-1 { animation-delay: 0.4s; }
-        .btn-2 { animation-delay: 0.5s; }
-        .btn-3 { animation-delay: 0.6s; }
-        .btn-4 { animation-delay: 0.7s; }
-        .btn-5 { animation-delay: 0.8s; }
-
-        .link-btn:hover {
-            background-color: #5c5655;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-        }
-
-        /* --- ELEGANTES EINGABEFENSTER (MODAL) --- */
-        .modal-overlay {
-            display: none; 
-            position: fixed; 
-            z-index: 100; 
-            left: 0; 
-            top: 0; 
-            width: 100%; 
-            height: 100%; 
-            background-color: rgba(0, 0, 0, 0.4); 
-            backdrop-filter: blur(5px);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-box {
-            background-color: #FFFFFF;
-            padding: 40px 30px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 340px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-            text-align: center;
-            position: relative;
-            transform: translateY(20px) scale(0.95);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .modal-box h2 {
-            font-weight: 500;
-            font-size: 20px;
-            margin-top: 0;
-            margin-bottom: 10px;
-            color: #1A1A1A;
-        }
-
-        .modal-box p {
-            font-weight: 400;
-            font-size: 14px;
-            color: #666666;
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 16px;
-            right: 20px;
-            color: #999999;
-            font-size: 28px;
-            font-weight: 300;
-            cursor: pointer;
-            transition: color 0.2s;
-            line-height: 1;
-            /* Auch das Schließen-X verhindert den Zoom */
-            touch-action: manipulation;
-        }
-
-        .close-btn:hover {
-            color: #1A1A1A;
-        }
-
-        .code-input {
-            width: 100%;
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 1px solid #EAEAEA;
-            border-radius: 6px;
-            background-color: #FBFBFB;
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .code-input:focus {
-            border-color: #766F6E;
-            background-color: #FFFFFF;
-            box-shadow: 0 0 0 3px rgba(118, 111, 110, 0.1);
-        }
-
-        .error-msg {
-            color: #D9534F;
-            font-size: 13px;
-            margin-bottom: 20px;
-            display: none;
-        }
+        h1 { font-weight: 500; font-size: 26px; letter-spacing: 1.5px; margin-top: 0; margin-bottom: 12px; color: #1A1A1A; }
+        .slogan { font-weight: 400; font-size: 15px; color: #666666; line-height: 1.6; margin-bottom: 45px; }
+        .link-btn { display: block; width: 100%; background-color: #766F6E; color: #FFFFFF; text-decoration: none; padding: 16px 20px; margin-bottom: 16px; border-radius: 6px; font-weight: 400; font-size: 16px; border: none; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; text-align: center; touch-action: manipulation; }
+        .link-btn:hover { background-color: #5c5655; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
         
-        .modal-submit {
-            margin-bottom: 0;
-            animation: none; 
-            opacity: 1;
-        }
+        .modal-overlay { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); opacity: 0; transition: opacity 0.3s ease; justify-content: center; align-items: center; }
+        .modal-box { background-color: #FFFFFF; padding: 40px 30px; border-radius: 12px; width: 90%; max-width: 340px; box-shadow: 0 20px 40px rgba(0,0,0,0.12); text-align: center; position: relative; transform: translateY(20px) scale(0.95); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .modal-box h2 { font-weight: 500; font-size: 20px; margin-top: 0; margin-bottom: 10px; color: #1A1A1A; }
+        .modal-box p { font-weight: 400; font-size: 14px; color: #666666; margin-bottom: 25px; line-height: 1.5; }
+        .close-btn { position: absolute; top: 16px; right: 20px; color: #999999; font-size: 28px; font-weight: 300; cursor: pointer; transition: color 0.2s; line-height: 1; touch-action: manipulation; }
+        .close-btn:hover { color: #1A1A1A; }
+        .code-input { width: 100%; padding: 16px; margin-bottom: 12px; border: 1px solid #EAEAEA; border-radius: 6px; background-color: #FBFBFB; font-family: 'Inter', sans-serif; font-size: 16px; text-align: center; text-transform: uppercase; letter-spacing: 1px; outline: none; transition: all 0.3s ease; }
+        .code-input:focus { border-color: #766F6E; background-color: #FFFFFF; box-shadow: 0 0 0 3px rgba(118, 111, 110, 0.1); }
+        .error-msg { color: #D9534F; font-size: 13px; margin-bottom: 20px; display: none; }
+        .modal-submit { margin-bottom: 0; opacity: 1; }
     </style>
     
-    <script
-        src="https://app.rybbit.io/api/script.js"
-        data-site-id="a516d4eb7794"
-        defer
-    ></script>
+    <script src="https://app.rybbit.io/api/script.js" data-site-id="a516d4eb7794" defer></script>
 
 </head>
 <body>
 
-<div class="container">
-    <h1>STUDIO MARU 丸</h1>
-    
-    <p class="slogan">Klarheit in jedem Detail. Lass uns gemeinsam deine nächste Vision zum Leben erwecken.</p>
-    
-    <a href="https://calendly.com/studiomaru-info/30min" class="link-btn btn-1" target="_blank">Kostenloses Erstgespräch</a>
-    <a href="/portfolio" class="link-btn btn-2">Unsere Arbeiten</a>
-    <button onclick="openModal()" class="link-btn btn-3">Kundenportal</button>
-    <a href="mailto:info@studiomaru.at" class="link-btn btn-4">E-Mail senden</a>
-    <a href="https://wa.me/436642766355" class="link-btn btn-5">WhatsApp Anfrage</a>
-</div>
-
-<div id="loginModal" class="modal-overlay">
-    <div class="modal-box">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <h2>Kunden-Login</h2>
-        <p>Bitte gib deinen persönlichen Zugangscode ein.</p>
-        
-        <input type="text" id="kundenCodeInput" class="code-input" placeholder="Z.B. MARU-01" onkeypress="handleEnter(event)">
-        <div id="errorText" class="error-msg">Dieser Code ist leider ungültig.</div>
-        
-        <button onclick="checkCode()" class="link-btn modal-submit">Zum Portal</button>
+    <div class="coming-soon-overlay" id="comingSoonScreen">
+        <div class="coming-soon-box">
+            <h1>STUDIO MARU 丸</h1>
+            <p class="message">Wir arbeiten im Hintergrund an etwas Besonderem.<br>Bald sind wir hier für dich da<span class="dot"></span></p>
+            
+            <div class="admin-trigger" id="adminTrigger" onclick="showAdminLogin()">Login</div>
+            <div class="admin-input-wrapper" id="adminInputWrapper">
+                <input type="password" id="adminPass" class="admin-input" placeholder="••••" onkeypress="checkAdminPass(event)">
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-    // Deine Kunden-Datenbank
-    const kundenDatenbank = {
-        "MARU-MUSTER": "https://www.notion.so/dein-muster-link",
-        "KUNDE-X": "https://www.notion.so/ein-anderer-link",
-        "ALMIS": "https://www.notion.so/Almis-Berghotel-310f5a498a0680f584aaf0335f906c3a?source=copy_link"
-    };
+    <div class="content-wrapper" id="mainContent" style="display: none;">
+        <div class="container">
+            <h1>STUDIO MARU 丸</h1>
+            <p class="slogan">Klarheit in jedem Detail. Lass uns gemeinsam deine nächste Vision zum Leben erwecken.</p>
+            <a href="https://calendly.com/studiomaru-info/30min" class="link-btn btn-1" target="_blank">Kostenloses Erstgespräch</a>
+            <a href="/portfolio" class="link-btn btn-2">Unsere Arbeiten</a>
+            <button onclick="openModal()" class="link-btn btn-3">Kundenportal</button>
+            <a href="mailto:info@studiomaru.at" class="link-btn btn-4">E-Mail senden</a>
+            <a href="https://wa.me/436642766355" class="link-btn btn-5">WhatsApp Anfrage</a>
+        </div>
 
-    const modal = document.getElementById("loginModal");
-    const modalBox = document.querySelector(".modal-box");
-    const inputField = document.getElementById("kundenCodeInput");
-    const errorText = document.getElementById("errorText");
+        <div id="loginModal" class="modal-overlay">
+            <div class="modal-box">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <h2>Kunden-Login</h2>
+                <p>Bitte gib deinen persönlichen Zugangscode ein.</p>
+                <input type="text" id="kundenCodeInput" class="code-input" placeholder="Z.B. MARU-01" onkeypress="handleEnter(event)">
+                <div id="errorText" class="error-msg">Dieser Code ist leider ungültig.</div>
+                <button onclick="checkCode()" class="link-btn modal-submit">Zum Portal</button>
+            </div>
+        </div>
+    </div>
 
-    function openModal() {
-        modal.style.display = "flex"; 
-        setTimeout(() => {
-            modal.style.opacity = "1";
-            modalBox.style.transform = "translateY(0) scale(1)";
-        }, 10);
-        inputField.value = "";
-        errorText.style.display = "none";
-        setTimeout(() => inputField.focus(), 300);
-    }
-
-    function closeModal() {
-        modal.style.opacity = "0";
-        modalBox.style.transform = "translateY(20px) scale(0.95)";
-        setTimeout(() => {
-            modal.style.display = "none";
-        }, 400);
-    }
-
-    function checkCode() {
-        let code = inputField.value.trim().toUpperCase();
-        
-        if (kundenDatenbank[code]) {
-            window.location.href = kundenDatenbank[code];
-        } else {
-            errorText.style.display = "block";
-            modalBox.style.transform = "translateX(5px)";
-            setTimeout(() => modalBox.style.transform = "translateX(-5px)", 100);
-            setTimeout(() => modalBox.style.transform = "translateX(0)", 200);
+    <script>
+        // --- ADMIN LOGIN LOGIK ---
+        function showAdminLogin() {
+            document.getElementById('adminTrigger').style.display = 'none';
+            document.getElementById('adminInputWrapper').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('adminPass').focus();
+            }, 100);
         }
-    }
 
-    function handleEnter(event) {
-        if (event.key === "Enter") {
-            checkCode();
+        function checkAdminPass(event) {
+            if (event.key === "Enter") {
+                const passInput = document.getElementById('adminPass');
+                if (passInput.value === "6020") {
+                    // Passwort korrekt! Maske sanft ausblenden
+                    const overlay = document.getElementById('comingSoonScreen');
+                    overlay.style.opacity = '0';
+                    overlay.style.visibility = 'hidden';
+                    
+                    // Hauptseite einblenden
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        document.getElementById('mainContent').style.display = 'block';
+                    }, 500); // Wartet, bis die Fade-Out Animation fertig ist
+                } else {
+                    // Passwort falsch! Feld wird rot
+                    passInput.style.borderColor = "#D9534F";
+                    passInput.value = "";
+                    setTimeout(() => {
+                        passInput.style.borderColor = "#EAEAEA";
+                    }, 800);
+                }
+            }
         }
-    }
 
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            closeModal();
+        // --- ANTI-ZOOM SCHUTZSCHILD ---
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+
+        // --- DEIN ALTER CODE FÜR DAS KUNDENPORTAL ---
+        const kundenDatenbank = {
+            "MARU-MUSTER": "https://www.notion.so/dein-muster-link",
+            "KUNDE-X": "https://www.notion.so/ein-anderer-link",
+            "ALMIS": "https://www.notion.so/Almis-Berghotel-310f5a498a0680f584aaf0335f906c3a?source=copy_link"
+        };
+
+        const modal = document.getElementById("loginModal");
+        const modalBox = document.querySelector(".modal-box");
+        const inputField = document.getElementById("kundenCodeInput");
+        const errorText = document.getElementById("errorText");
+
+        function openModal() {
+            modal.style.display = "flex"; 
+            setTimeout(() => {
+                modal.style.opacity = "1";
+                modalBox.style.transform = "translateY(0) scale(1)";
+            }, 10);
+            inputField.value = "";
+            errorText.style.display = "none";
+            setTimeout(() => inputField.focus(), 300);
         }
-    }
-</script>
+
+        function closeModal() {
+            modal.style.opacity = "0";
+            modalBox.style.transform = "translateY(20px) scale(0.95)";
+            setTimeout(() => {
+                modal.style.display = "none";
+            }, 400);
+        }
+
+        function checkCode() {
+            let code = inputField.value.trim().toUpperCase();
+            if (kundenDatenbank[code]) {
+                window.location.href = kundenDatenbank[code];
+            } else {
+                errorText.style.display = "block";
+                modalBox.style.transform = "translateX(5px)";
+                setTimeout(() => modalBox.style.transform = "translateX(-5px)", 100);
+                setTimeout(() => modalBox.style.transform = "translateX(0)", 200);
+            }
+        }
+
+        function handleEnter(event) {
+            if (event.key === "Enter") {
+                checkCode();
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
 
 </body>
 </html>
